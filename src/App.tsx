@@ -2,6 +2,7 @@ import { useState } from "react";
 import ModelViewer from "./components/ModelViewer";
 import ImageUploader from "./components/ImageUploader";
 import { quantizeToTwoColors } from "./utils/quantizeImage";
+import { mergeCanvases } from "./utils/mergeCanvases";
 import * as THREE from "three";
 
 export default function App() {
@@ -13,6 +14,10 @@ export default function App() {
 
   const handleUpload = async (files: File[]) => {
     const canvases = await Promise.all(files.map(quantizeToTwoColors));
+    let finalCanvas = canvases[0];
+    if (canvases.length === 2) {
+      finalCanvas = mergeCanvases(canvases[0], canvases[1]);
+    }
     const texList = canvases.map((canvas) => new THREE.CanvasTexture(canvas));
     setTextures(texList);
   };
