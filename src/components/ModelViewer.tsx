@@ -21,13 +21,14 @@ function Model({ textures, imageTransform, dimensions }: ModelProps) {
     "https://raw.githubusercontent.com/oneone-studio/interview-assets/refs/heads/main/model.glb"
   );
 
+  console.log("scene", scene);
+
   useEffect(() => {
     if (textures.length === 0) return;
 
     const mesh = scene.getObjectByProperty("type", "Mesh") as THREE.Mesh;
     if (!mesh) return;
 
-    // Apply texture transform
     const texture = textures[0];
     texture.repeat.set(imageTransform.scale, imageTransform.scale);
     texture.offset.set(imageTransform.position.x, imageTransform.position.y);
@@ -40,7 +41,6 @@ function Model({ textures, imageTransform, dimensions }: ModelProps) {
       transparent: true,
     });
 
-    // Apply model scale using dimensions
     scene.scale.set(dimensions.x / 100, dimensions.y / 100, dimensions.z / 100);
   }, [scene, textures, imageTransform, dimensions]);
 
